@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+       <title>Moodify — Modern Mood Music</title>
+  <link rel="stylesheet" href="style-b.css">
+</head>
+<body>
+  <div class="app">
+    <!-- background layers: gradient animation + video fallback -->
+    <div id="gradientLayer" class="bg-layer"></div>
+    <video id="bgVideoB" class="bg-layer" autoplay muted loop></video>
+
+   <!-- FIRST PAGE / MOOD SELECTOR -->
+<section id="hero">
+
+  <!-- Floating Blur Blobs -->
+  <div class="blob blob1"></div>
+  <div class="blob blob2"></div>
+  <div class="blob blob3"></div>
+
+  <!-- Glow Ring -->
+  <div class="glowRing"></div>
+
+  <div class="heroCard">
+    <h1 class="bounceTitle">Moodify</h1>
+    <p class="sub">Pick a mood and we'll set the vibe.</p>
+
+    <div class="moodGrid">
+
+      <button data-mood="happy" class="mood happy">😊 Happy</button>
+      <button data-mood="sad" class="mood sad">😢 Sad</button>
+      <button data-mood="party" class="mood party">🎉 Party</button>
+      <button data-mood="romantic" class="mood romantic">❤️ Romantic</button>
+
+    </div>
+  </div>
+</section>
+    <!-- Main player -->
+    <main id="mainApp" class="hidden">
+      <header class="appHeader">
+        <div class="logo">Moodify</div>
+        <div class="now">
+  <img id="waveGif" src="https://files.catbox.moe/j053rl.gif" alt="waves" class="wave hidden">
+  Now Playing: <span id="nowPlaying">—</span>
+</div>
+      </header>
+
+      <section class="contentWrap">
+        <aside class="playlistPanel">
+          <h2 id="moodLabel">Mood</h2>
+          <div id="playlistB" class="playlistB"></div>
+        </aside>
+
+        <section class="visualPanel">
+         <div class="visualCard">
+  <div id="visualCover" class="visualCover"></div>
+  <div class="controls">
+    <button id="prevB" class="ctrl">⟨</button>
+    <button id="playB" class="ctrl">►</button>
+    <button id="nextB" class="ctrl">⟩</button>
+
+  </div>
+  <input id="seekB" type="range" min="0" max="100" value="0"/>
+
+  <!-- MUSIC WAVE BELOW PLAYER -->
+  <img id="waveGif" src="wave.gif" alt="wave animation" class="wave hidden">
+</div>
+        </section>
+      </section>
+    </main>
+<!-- MOOD SWITCH BUTTON (BOTTOM RIGHT) -->
+<button id="moodSwitch" class="moodSwitch">🎭 Mood</button>
+  </div>
+
+  <script src="script-b.js"></script>
+
+<style>
+/* Model B: modern responsive UI with animated gradient */
+:root{
+  --glass: rgba(255,255,255,0.06);
+  --glass-2: rgba(255,255,255,0.08);
+  --card-radius: 14px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body,#bgVideoB{height:100%}
+body{font-family:Inter,system-ui,Segoe UI,Arial; background:#000; color:#fff; overflow-x:hidden; min-height:100vh}
+
+/* FLOATING BLUR BLOBS */
+.blob {
+  position: absolute;
+  width: 320px;
+  height: 320px;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.5;
+  animation: float 9s infinite ease-in-out alternate;
+  z-index: 0;
+}
+
+.blob1 {
+  background: #ff7eb3;
+  top: 10%;
+  left: 10%;
+}
+
+.blob2 {
+  background: #65d5ff;
+  top: 55%;
+  right: 15%;
+  animation-delay: 1s;
+}
+
+.blob3 {
+  background: #ffc665;
+  top: 30%;
+  left: 60%;
+  animation-delay: 2.2s;
+}
+
+@keyframes float {
+  0% { transform: translateY(0px) scale(1); }
+  100% { transform: translateY(-60px) scale(1.15); }
+}
+
+.glowRing {
+  position: absolute;
+  width: 450px;
+  height: 450px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,0.4), rgba(255,255,255,0));
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  filter: blur(50px);
+  opacity: 0.45;
+  z-index: 0;
+}
+
+/* BOUNCE POP ANIMATION */
+.bounceTitle {
+  font-size: 3.2rem;
+  font-weight: 900;
+  color: #fff;
+  animation: popBounce 1.2s ease-out forwards;
+  opacity: 0;
+  transform: scale(0.6);
+  text-shadow:
+    0 0 10px rgba(255,255,255,0.7),
+    0 0 18px rgba(255,255,255,0.35);
+}
+
+@keyframes popBounce {
+  0% {
+    opacity: 0;
+    transform: scale(0.6) translateY(40px);
+  }
+  40% {
+    opacity: 1;
+    transform: scale(1.15) translateY(-10px);
+  }
+  65% {
+    transform: scale(0.95) translateY(6px);
+  }
+  85% {
+    transform: scale(1.05) translateY(-4px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.mood {
+  backdrop-filter: blur(12px);
+  background: rgba(255,255,255,0.14);
+  border: 1px solid rgba(255,255,255,0.35);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 14px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  box-shadow: 
+    0 8px 20px rgba(0,0,0,0.3),
+    inset 0 0 8px rgba(255,255,255,0.25);
+  transition: 0.25s ease;
+}
+
+.mood:hover {
+  transform: translateY(-4px);
+  box-shadow: 
+    0 12px 28px rgba(0,0,0,0.45),
+    inset 0 0 12px rgba(255,255,255,0.5);
+}
+
+
+#hero {
+  position: relative;
+  overflow: hidden;
+}
+
+.heroCard {
+  z-index: 10;
+  position: relative;
+}
+
+
+/* layered background */
+.bg-layer{ position:fixed; inset:0; z-index:0; pointer-events:none; }
+#gradientLayer{
+  background: linear-gradient(120deg,#ff9a9e,#fad0c4);
+  filter: saturate(0.8) blur(8px);
+  animation: gradientShift 12s ease infinite;
+  opacity:0.55; 
+}
+@keyframes gradientShift{
+  0%{background:linear-gradient(120deg,#ff9a9e,#fad0c4)}
+  25%{background:linear-gradient(120deg,#a18cd1,#fbc2eb)}
+  50%{background:linear-gradient(120deg,#84fab0,#8fd3f4)}
+  75%{background:linear-gradient(120deg,#f6d365,#fda085)}
+  100%{background:linear-gradient(120deg,#ff9a9e,#fad0c4)}
+}
+
+/* layout */
+.app{position:relative; z-index:1; min-height:100vh; display:flex; flex-direction:column;}
+#hero{display:flex; align-items:center; justify-content:center; height:100vh;}
+.heroCard{backdrop-filter: blur(6px); background:rgba(0,0,0,0.35); padding:28px; border-radius:18px; text-align:center; box-shadow:0 8px 30px rgba(0,0,0,0.4);}
+.heroCard h1{font-size:2.4rem; margin-bottom:8px}
+.heroCard p{opacity:0.85; margin-bottom:14px}
+.moodGrid{display:flex; gap:10px; flex-wrap:wrap; justify-content:center}
+.mood{padding:10px 16px; border-radius:10px; border:none; font-weight:700; cursor:pointer; min-width:110px}
+.mood.happy{background:linear-gradient(90deg,#f6d365,#fda085)}
+.mood.sad{background:linear-gradient(90deg,#89f7fe,#66a6ff)}
+.mood.party{background:linear-gradient(90deg,#f78ca0,#f8cdda)}
+.mood.romantic{background:linear-gradient(90deg,#a18cd1,#fbc2eb)}
+
+/* main app */
+.hidden{display:none}
+.appHeader{display:flex; justify-content:space-between; padding:14px 28px; align-items:center}
+.contentWrap{display:flex; gap:18px; padding:18px 28px; align-items:flex-start}
+.playlistPanel{width:320px; background:var(--glass); padding:12px; border-radius:var(--card-radius); box-shadow:0 6px 20px rgba(0,0,0,0.35)}
+.playlistB{display:flex; flex-direction:column; gap:10px; margin-top:8px; max-height:60vh; overflow:auto}
+.track {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(5px);
+    padding: 8px;
+    border-radius: 10px;
+}.track img{width:48px;height:48px;border-radius:8px;object-fit:cover}
+.visualPanel{flex:1; display:flex; align-items:center; justify-content:center}
+.visualCard{
+  width:100%;
+  max-width:720px;
+  background:rgba(0,0,0,0.50);
+  backdrop-filter: blur(5px);
+  padding:26px;
+  border-radius:16px;
+  text-align:center;
+  box-shadow:0 8px 35px rgba(0,0,0,0.6);
+}
+
+
+.visualCover{width:220px;height:220px;margin:0 auto;border-radius:12px;background-size:cover;background-position:center; box-shadow:0 10px 40px rgba(0,0,0,0.4)}
+.controls{display:flex; gap:18px; align-items:center; justify-content:center; margin-top:14px}
+.ctrl{background:transparent;border:1px solid rgba(255,255,255,0.12); padding:8px 14px;border-radius:8px;color:#fff;cursor:pointer}
+.now {
+   opacity: 1;
+  font-weight: 700;
+  font-size: 1.1rem;
+  text-shadow: 0 0 6px rgba(0,0,0,0.7); /* makes text pop */
+}
+.wave{
+  width: 420px;
+  height: auto;
+  margin:18px auto 0 auto;
+  display:block;
+  opacity:1;
+  transition:opacity .3s ease;
+}
+.wave.hidden{
+  opacity:0;
+}
+
+
+/* seek */
+#seekB{width:80%; margin-top:12px}
+
+/* Floating Mood Switch Button */
+.moodSwitch {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 99999;
+
+  padding: 14px 22px;
+  border-radius: 50px;
+  border: none;
+
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.12);
+
+  box-shadow: 
+    0 0 12px rgba(255,255,255,0.85),
+    0 0 24px rgba(255,255,255,0.55),
+    inset 0 0 6px rgba(255,255,255,0.5);
+
+  backdrop-filter: blur(8px);
+  border: 2px solid rgba(255,255,255,0.4);
+
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+.moodSwitch:hover {
+  transform: scale(1.08);
+  box-shadow: 
+    0 0 18px rgba(255,255,255,1),
+    0 0 36px rgba(255,255,255,0.7),
+    inset 0 0 10px rgba(255,255,255,0.7);
+}
+#bgVideoB {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: -2;
+  opacity: 1;              /* LOWER OPACITY HERE */
+  filter: brightness(1);
+}
+/* responsive */
+@media (max-width:900px){
+  .contentWrap{flex-direction:column}
+  .playlistPanel{width:100%}
+}
+
+</style>
+
+<script>
+/* Model B: modern moodify player */
+const moodDef = {
+  happy: {
+    label: "Happy Vibes",
+    gradient: "linear-gradient(120deg,#FFD54F,#FF7043)",
+    video: "https://files.catbox.moe/zx5ccl.mp4",
+    cover: ".jpg",
+    songs: [
+      {name:"Matargashti-Mohit Chauhan", file:"https://files.catbox.moe/mn0jvj.mp3", cover:"https://files.catbox.moe/yt4i0y.jpg"},
+      {name:"Nachde Ne Saare - Jasleen Royal", file:"https://files.catbox.moe/sk70xe.mp3", cover:"https://files.catbox.moe/6xrm02.jpg"},
+      {name:"Gallan Goodiyaan - Dil Dhadhak Ne Do", file:"https://files.catbox.moe/jaerkf.mp3", cover:"https://files.catbox.moe/vzbbf1.jpg"},
+      {name:"Thodi Si Daaru - AP Dhillon", file:"https://files.catbox.moe/jgzty9.mp3", cover:"https://files.catbox.moe/iu8yiv.jpg"},
+      {name:"BlindingLights -The Weeknd", file:"https://files.catbox.moe/7aixbg.mp3", cover:"https://files.catbox.moe/41ihp9.jpg"}
+    ]
+  },
+
+  sad: {
+    label: "Sad Moods",
+    gradient: "linear-gradient(120deg,#2b5876,#4e4376)",
+    video: "https://files.catbox.moe/kppk6y.mp4",
+    cover: "banners/sad.jpg",
+    songs: [
+      {name:"Summertime Sadness - Lana Del Ray", file:"https://files.catbox.moe/u56aqi.mp3", cover:"https://files.catbox.moe/eg9hlr.jpg"},
+      {name:"Agar Tum Sath Ho-Arijit Singh", file:"https://files.catbox.moe/byp9tt.mp3", cover:"https://files.catbox.moe/l2hxb7.jpg"},
+      {name:"Cry- Cigarettes After Sex", file:"https://files.catbox.moe/zapk29.mp3", cover:"https://files.catbox.moe/ufh6zz.jpg"},
+      {name:"Lovely-Billie Eilish Khalid", file:"https://files.catbox.moe/6tlqk6.mp3", cover:"https://files.catbox.moe/7xk8ra.jpg"},
+      {name:"Humdard-Arijit Singh", file:"https://files.catbox.moe/im6hia.mp3", cover:"https://files.catbox.moe/fjjzuf.jpg"}
+    ]
+  },
+
+  party: {
+    label: "Party",
+    gradient: "linear-gradient(120deg,#ff00cc,#333399)",
+    video: "https://files.catbox.moe/b3nyix.mp4",
+    cover: "banners/party.jpg",
+    songs: [
+      {name:"Lat Lag Gayee-Race 2", file:"https://files.catbox.moe/m7nhu3.mp3", cover:"https://files.catbox.moe/9q8tkh.jpeg"},
+      {name:"Badtameez Dil Yeh - Jawaani Hai Deewani", file:"https://files.catbox.moe/2l9hwz.mp3", cover:"https://files.catbox.moe/iopokq.jpg"},
+      {name:"Besharmi Ki Height - Main Tera Hero", file:"https://files.catbox.moe/lu9oa0.mp3", cover:"https://files.catbox.moe/exp7g0.jpeg"},
+      {name:"Sao Paulo-The Weeknd", file:"https://files.catbox.moe/3ro1vl.mp3", cover:"https://files.catbox.moe/u042p0.jpeg"},
+      {name:"Danza Kuduro - Don Omar", file:"https://files.catbox.moe/rlede4.mp3", cover:"https://files.catbox.moe/okeycs.jpeg"}
+    ]
+  },
+
+  romantic: {
+    label: "Romantic",
+    gradient: "linear-gradient(120deg,#ff9a9e,#fecfef)",
+    video: "https://files.catbox.moe/7x10k2.mp4",
+    cover: "banners/romantic.jpg",
+    songs: [
+      {name:"I Think They Call This Love - Matthew Field", file:"https://files.catbox.moe/fm7jon.mp3", cover:"https://files.catbox.moe/atr7ee.jpeg"},
+      {name:"We Fell in Love in October - girl in red", file:"https://files.catbox.moe/xcy82m.mp3", cover:"https://files.catbox.moe/dkf0yi.jpeg"},
+      {name:"Put Your Head On My Shoulder - Macarons Project", file:"https://files.catbox.moe/eof7l0.mp3", cover:"https://files.catbox.moe/yop9p8.jpeg"},
+      {name:"Sahiba - Aditya Rikhari", file:"https://files.catbox.moe/99s4vt.mp3", cover:"https://files.catbox.moe/k8a2a7.jpeg"},
+      {name:"Hum Tere Pyar Mein Sara Aalam - Lata Ji", file:"https://files.catbox.moe/qx3p3t.mp3", cover:"https://files.catbox.moe/x1wjrs.jpeg"}
+    ]
+}
+};
+
+const bgVideoB = document.getElementById('bgVideoB');
+const gradientLayer = document.getElementById('gradientLayer');
+const mainApp = document.getElementById('mainApp');
+const hero = document.getElementById('hero');
+const moodButtons = document.querySelectorAll('.mood');
+const playlistB = document.getElementById('playlistB');
+const moodLabel = document.getElementById('moodLabel');
+const nowPlaying = document.getElementById('nowPlaying');
+const visualCover = document.getElementById('visualCover');
+const playBtn = document.getElementById('playB');
+const prevBtn = document.getElementById('prevB');
+const nextBtn = document.getElementById('nextB');
+const seek = document.getElementById('seekB');
+
+let player = new Audio();
+let currentList = [];
+let index = 0;
+let isPlaying = false;
+let currentMoodKey = '';
+
+function openMood(key){
+  const md = moodDef[key];
+  if(!md) return;
+  currentList = md.songs;
+  index = 0;
+  currentMoodKey = key;
+  // set gradient layer
+gradientLayer.style.opacity = "0";
+  gradientLayer.style.background = "none";
+  // set video
+  bgVideoB.src = md.video;
+  // populate playlist
+  moodLabel.innerText = md.label;
+  playlistB.innerHTML = '';
+  currentList.forEach((t,i)=>{
+    const el = document.createElement('div');
+    el.className = 'track';
+    el.innerHTML = `
+  <img src="${t.cover}" alt="">
+  <div class="tname">${t.name}</div>
+`;
+    el.addEventListener('click', ()=>{ playAt(i); });
+    playlistB.appendChild(el);
+  });
+  // show main app and hide hero
+  hero.style.display = 'none';
+  mainApp.classList.remove('hidden');
+  // load first track
+  load(index);
+}
+document.getElementById("moodSwitch").onclick = () => {
+    window.location.href = "B.html";   // ← takes user back to mood selector
+}
+
+/* load a track by index */
+function load(i){
+  const t = currentList[i];
+  if(!t) return;
+  player.src = t.file;
+  visualCover.style.backgroundImage = `url('${t.cover}')`;
+  nowPlaying.innerText = t.name;
+  seek.value = 0;
+}
+
+/* play at index */
+function playAt(i){
+  index = i;
+  load(index);
+  player.play();
+  isPlaying = true;
+  playBtn.innerText = '❚❚';
+}
+
+/* play/pause */
+playBtn.addEventListener('click', ()=>{
+  const wave = document.getElementById('waveGif');
+
+  if(isPlaying){
+    player.pause();
+    isPlaying = false;
+    playBtn.innerText = '►';
+    wave.classList.add('hidden');   // hide wave
+  } else {
+    player.play();
+    isPlaying = true;
+    playBtn.innerText = '❚❚';
+    wave.classList.remove('hidden');  // show wave
+  }
+});prevBtn.addEventListener('click', ()=>{
+  index = (index-1+currentList.length) % currentList.length;
+  load(index); player.play(); isPlaying=true; playBtn.innerText='❚❚';waveGif.classList.remove('hidden');
+});
+nextBtn.addEventListener('click', ()=>{
+  index = (index+1) % currentList.length;
+  load(index); player.play(); isPlaying=true; playBtn.innerText='❚❚';waveGif.classList.remove('hidden');
+});
+
+/* update seek */
+player.addEventListener('timeupdate', ()=> {
+  if(!player.duration) return;
+  const value = (player.currentTime / player.duration) * 100;
+  seek.value = value;
+});
+seek.addEventListener('input', ()=> {
+  if(!player.duration) return;
+  player.currentTime = (seek.value / 100) * player.duration;
+});
+
+/* attach mood buttons */
+moodButtons.forEach(b=> b.addEventListener('click', ()=> openMood(b.dataset.mood)));
+
+/* auto-advance when track ends */
+player.addEventListener('ended', ()=> {
+  nextBtn.click();waveGif.classList.remove('hidden');
+});
+
+/* optional: keyboard shortcuts */
+document.addEventListener('keydown', e=>{
+  if(e.key === ' '){ e.preventDefault(); playBtn.click(); }
+  if(e.key === 'ArrowRight') nextBtn.click();
+  if(e.key === 'ArrowLeft') prevBtn.click();
+});
+
+// Mood Switch Button → Return to First Page
+document.getElementById("moodSwitch").onclick = () => {
+  
+  // Stop music
+  player.pause();
+  isPlaying = false;
+  playBtn.innerText = "►";
+
+  // Hide wave animation
+  waveGif.classList.add("hidden");
+
+  // Reset background
+  gradientLayer.style.background = "";
+  bgVideoB.src = "";
+
+  // Hide main app, show hero (first page)
+  mainApp.classList.add("hidden");
+  hero.style.display = "flex";
+
+  // Clear playlist
+  playlistB.innerHTML = "";
+  nowPlaying.innerText = "—";
+
+  // Reset cover
+  visualCover.style.backgroundImage = "";
+};
+document.getElementById("moodSwitch").onclick = () => {
+    window.location.href = "https://files.catbox.moe/16l55y.html";   // ← takes user back to mood selector
+};
+</script>
+</body>
+</html>
